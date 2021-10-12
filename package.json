@@ -1,21 +1,23 @@
 {
   "name": "@levelcommerce/levelclient",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LevelCommerce GraphQL SDK",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly" : "npm run lint",
-    "prepare" : "npm run build",
-    "preversion" : "npm run lint",
-    "version" : "npm run format && git add -A src",
-    "postversion" : "git push && git push --tags",
+    "prepublishOnly": "npm run lint",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "keywords": [],
   "author": "Corey Kogan",
   "license": "ISC",
