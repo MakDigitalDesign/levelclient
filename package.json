@@ -17,8 +17,12 @@
   },
   "files": ["lib/**/*"],
   "keywords": [],
-  "author": "",
+  "author": "Corey Kogan",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakDigitalDesign/levelclient.git"
+  },
   "devDependencies": {
     "axios": "^0.23.0",
     "prettier": "^2.4.1",
