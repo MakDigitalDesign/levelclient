@@ -1,59 +1,15 @@
 import axios, { AxiosInstance, AxiosRequestHeaders } from 'axios';
-import { ClientError } from './error';
-import { productInfoFragment } from './fragments/product';
+import Product from './product';
 
 interface Config {
   url: string;
   headers?: AxiosRequestHeaders;
 }
 
-interface ProductOptions {
-  skip?: string | number;
-  take?: number | string;
-  fields?: [keyof ProductFields];
-}
-
-interface ProductByIdOperation {
-  id: number;
-  fields?: [keyof ProductFields];
-}
-
-type ProductFields = {
-  name?: string;
-  path?: string;
-  price?: number;
-  thumbnail?: string;
-  description?: string;
-  sku?: string;
-};
-
-type Product = Required<ProductFields>;
-
-type Node = {
-  node: Product;
-};
-
-interface GetProductsResponse {
-  data: {
-    data: {
-      allProducts: {
-        edges: Node[];
-      };
-    };
-  };
-}
-
-interface GetProductByIdResponse {
-  data: {
-    data: {
-      productById: Node;
-    };
-  };
-}
-
 class LevelClient {
   private config: Config;
-  private instance: AxiosInstance;
+  protected instance: AxiosInstance;
+  public product: Product;
 
   constructor(config: Config) {
     if (!config) {
@@ -61,7 +17,9 @@ class LevelClient {
     }
 
     this.config = config;
-    this.instance = this.initialize(config);
+    const instance = this.initialize(config);
+    this.instance = instance;
+    this.product = new Product(instance);
   }
 
   private initialize = ({ url, headers }: Config) => {
@@ -75,93 +33,6 @@ class LevelClient {
       method: 'POST',
     });
   };
-
-  private constructVariablesObject(options: ProductOptions) {
-    const { skip, take, fields } = options;
-
-    const showAllFields = !fields;
-
-    return {
-      skip,
-      take,
-      name: (fields && fields.includes('name')) ?? showAllFields,
-      path: (fields && fields.includes('path')) ?? showAllFields,
-      price: (fields && fields.includes('price')) ?? showAllFields,
-      thumbnail: (fields && fields.includes('thumbnail')) ?? showAllFields,
-      description: (fields && fields.includes('description')) ?? showAllFields,
-      sku: (fields && fields.includes('sku')) ?? showAllFields,
-    };
-  }
-
-  public async getProducts(options: ProductOptions) {
-    const instance = this.instance;
-
-    const variables = this.constructVariablesObject(options);
-
-    const { data }: GetProductsResponse = await instance.post('', {
-      query: `
-            query Query(
-                $skip: Int = 0, 
-                $take: Int = 10, 
-                $name: Boolean = true,
-                $path: Boolean = true,
-                $price: Boolean = true,
-                $thumbnail: Boolean = true,
-                $description: Boolean = true,
-                $sku: Boolean = true
-
-            ) {
-                allProducts(skip: $skip, take: $take) {
-                  edges {
-                    node {
-                        ...Product
-                    }
-                  }
-                }
-              }
-
-              ${productInfoFragment}
-              `,
-      variables,
-    });
-
-    return data.data;
-  }
-
-  public async getProductById(options: ProductByIdOperation) {
-    const instance = this.instance;
-
-    const variables = this.constructVariablesObject(options);
-
-    const { data }: GetProductByIdResponse = await instance.post('', {
-      query: `
-            query Query(
-                $Id: Int!,
-                $name: Boolean = true,
-                $path: Boolean = true,
-                $price: Boolean = true,
-                $thumbnail: Boolean = true,
-                $description: Boolean = true,
-                $sku: Boolean = true
-
-            ) {
-                productById(id: $Id) {
-                    node {
-                        ...Product
-                    }
-                }
-              }
-
-              ${productInfoFragment}
-              `,
-      variables: {
-        ...variables,
-        Id: options.id,
-      },
-    });
-
-    return data.data.productById.node;
-  }
 }
 
 export default LevelClient;
