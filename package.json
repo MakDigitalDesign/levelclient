@@ -1,6 +1,6 @@
 {
   "name": "@levelcommerce/levelclient",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "LevelCommerce GraphQL SDK",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -12,7 +12,7 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json"
   },
   "files": [
