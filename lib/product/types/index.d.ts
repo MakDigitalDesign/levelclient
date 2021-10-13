@@ -2,6 +2,7 @@ export interface ProductOptions {
     skip?: string | number;
     take?: number | string;
     fields?: [keyof ProductFields];
+    productIds?: number[];
 }
 export interface ProductByIdOptions {
     id: number;

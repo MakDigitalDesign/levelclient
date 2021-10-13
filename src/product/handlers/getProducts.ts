@@ -16,10 +16,11 @@ async function getProducts(this: Product, options?: ProductOptions) {
                 $price: Boolean = true,
                 $thumbnail: Boolean = true,
                 $description: Boolean = true,
-                $sku: Boolean = true
+                $sku: Boolean = true,
+                $productIds: [Int] = []
 
             ) {
-                allProducts(skip: $skip, take: $take) {
+                allProducts(skip: $skip, take: $take, productIds: $productIds) {
                   edges {
                     node {
                         ...Product
